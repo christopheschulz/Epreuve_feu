@@ -11,7 +11,6 @@ import sys
 def evaluer_expression(expression,total=0):
     # on split l'entrée
     split_expression = expression.split()
-
     # on met les opération dans l'ordre de priorité
     if expression:
         if "(" and ")" in expression:
@@ -19,31 +18,40 @@ def evaluer_expression(expression,total=0):
             indice_parenthese_fermee = expression.index(')')
             total = evaluer_expression(expression[indice_parenthese_ouverte+1:indice_parenthese_fermee],total)
         
+        # on gère le modulo
+        elif "%" in expression:
+            # on cherche l'indice de l'opérateur
+            indice_operateur = split_expression.index('%')
+            # on fait l'opération
+            total += float(split_expression[indice_operateur-1]) % float(split_expression[indice_operateur+1]) 
+        
         # on gère la multiplication
         elif "*" in expression:
             # on cherche l'indice de l'opérateur
             indice_operateur = split_expression.index('*')
             # on fait l'opération
-            total += int(split_expression[indice_operateur-1]) * int(split_expression[indice_operateur+1]) 
-            
+            total += float(split_expression[indice_operateur-1]) * float(split_expression[indice_operateur+1]) 
+        
+        # on gère la division    
         elif "/" in expression:
             # on cherche l'indice de l'opérateur
             indice_operateur = split_expression.index('/')
             # on fait l'opération
-            total += int(split_expression[indice_operateur-1]) / int(split_expression[indice_operateur+1]) 
+            total += float(split_expression[indice_operateur-1]) / float(split_expression[indice_operateur+1]) 
         
+        # on gère l'addition
         elif "+" in expression:
             # on cherche l'indice de l'opérateur
             indice_operateur = split_expression.index('+')
             # on fait l'opération
-            total += int(split_expression[indice_operateur-1]) + int(split_expression[indice_operateur+1]) 
-         
+            total += float(split_expression[indice_operateur-1]) + float(split_expression[indice_operateur+1]) 
+
+        # on gère la soustraction 
         elif "-" in expression:
             # on cherche l'indice de l'opérateur
             indice_operateur = split_expression.index('-')
             # on fait l'opération
-            total += int(split_expression[indice_operateur-1]) - int(split_expression[indice_operateur+1]) 
-
+            total += float(split_expression[indice_operateur-1]) - float(split_expression[indice_operateur+1]) 
 
         # puis on efface l'opération effectuée
         del split_expression[indice_operateur-1 : indice_operateur+2]
@@ -69,7 +77,10 @@ def verification_arguments(arguments):
 
 
 def afficher(chaine):
-   print(chaine)
+    if chaine == int(chaine):
+        print(int(chaine))
+    else:
+        print(f"{chaine:.2f}")
 
 
 def erreur():
@@ -84,8 +95,6 @@ if __name__ == "__main__":
         if resultat == resultat_eval:
             afficher(resultat)
         else:
-            erreur()
-        
-        
+            erreur()  
     else:
         erreur()
