@@ -12,14 +12,25 @@ def evaluer_expression(expression,total=0):
     # on split l'entrée
     split_expression = expression.split()
     # on met les opération dans l'ordre de priorité
-    if expression:
-        if "(" and ")" in expression:
-            indice_parenthese_ouverte = expression.index('(')
-            indice_parenthese_fermee = expression.index(')')
-            total = evaluer_expression(expression[indice_parenthese_ouverte+1:indice_parenthese_fermee],total)
-        
+    
+    # on gère les parenthèses
+    if "(" and ")" in expression:
+        # mais où sont elles ?
+        indice_parenthese_ouverte = expression.index('(')
+        indice_parenthese_fermee = expression.index(')')
+        # on récupère l'expression entre parenthèses
+        expression_entre_parenthèse = expression[indice_parenthese_ouverte+1:indice_parenthese_fermee] 
+        # print(expression_entre_parenthèse)
+        # et on l'envoie dan le fonction
+        total += evaluer_expression(expression_entre_parenthèse)
+        # on remplace les parenthèse par le total calculé
+        expression = expression[:indice_parenthese_ouverte] + str(total) + expression[indice_parenthese_fermee+1:]
+        # puis on renvoie dans la fonction
+        total = evaluer_expression(expression)
+
+    else:
         # on gère le modulo
-        elif "%" in expression:
+        if "%" in expression:
             # on cherche l'indice de l'opérateur
             indice_operateur = split_expression.index('%')
             # on fait l'opération
@@ -91,7 +102,9 @@ if __name__ == "__main__":
     arguments = sys.argv[1:]
     if verification_arguments(arguments):
         resultat = evaluer_expression(arguments[0])
+        # on utilise la fonction eval pour vérifier si c'est juste
         resultat_eval = eval(arguments[0])
+        # si c'est juste on affiche sinon erreur
         if resultat == resultat_eval:
             afficher(resultat)
         else:
