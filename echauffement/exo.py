@@ -33,7 +33,7 @@ def afficher_rectangle(line,columns):
 
 def verification_arguments(arguments):
     ok = False
-    if len(arguments) == 2:
+    if len(arguments) == 2 and "0" not in arguments:
         if arguments[0].isdigit() and arguments[1].isdigit() == 1:
             ok = True
     return ok
