@@ -12,72 +12,69 @@ def evaluer_expression(expression):
     if "(" and ")" in expression:
         total = gestion_parentheses(expression,total)
        
-    else: # il faut encore gérer gauche à dooite à priorité égale
-        # on gère le modulo
-
+    else: 
+        # on regarde les indices des opérateur présent de niveau 0 et 1
         indice_operateur_niveau_0,indice_operateur_niveau_1 = gestion_indices_operateur(split_expression)
-        print("indice operateur",indice_operateur_niveau_0,indice_operateur_niveau_1)
-        
-        # on regarde si le % est le premier dans la liste des indices d'operateur niveau 1
-        if "%" in expression and split_expression.index("%") == indice_operateur_niveau_1[0]:
-            # on cherche l'indice de l'opérateur
-            indice_operateur = split_expression.index('%')
-            # on fait l'opération
-            total += float(split_expression[indice_operateur-1]) % float(split_expression[indice_operateur+1]) 
-        
-        # on regarde si le * est le premier dans la liste des indices d'operateur niveau 1
-        elif "*" in expression and split_expression.index("*") == indice_operateur_niveau_1[0]:
-            # on cherche l'indice de l'opérateur
-            indice_operateur = split_expression.index('*')
-            # on fait l'opération
-            total += float(split_expression[indice_operateur-1]) * float(split_expression[indice_operateur+1]) 
-        
-        # on regarde si le / est le premier dans la liste des indices d'operateur niveau 1
-        elif "/" in expression and split_expression.index("/") == indice_operateur_niveau_1[0]:
-            # on cherche l'indice de l'opérateur
-            indice_operateur = split_expression.index('/')
-            # on fait l'opération
-            total += float(split_expression[indice_operateur-1]) / float(split_expression[indice_operateur+1]) 
-        
-        # on regarde si le + est le premier dans la liste des indices d'operateur niveau 0
-        elif "+" in expression and split_expression.index("+") == indice_operateur_niveau_0[0]:
-            # on cherche l'indice de l'opérateur
-            indice_operateur = split_expression.index('+')
-            # on fait l'opération
-            total += float(split_expression[indice_operateur-1]) + float(split_expression[indice_operateur+1]) 
-
-        # on regarde si le - est le premier dans la liste des indices d'operateur niveau 0
-        elif "-" in expression and split_expression.index("-") == indice_operateur_niveau_0[0]:
-            # on cherche l'indice de l'opérateur
-            indice_operateur = split_expression.index('-')
-            # on fait l'opération
-            total += float(split_expression[indice_operateur-1]) - float(split_expression[indice_operateur+1]) 
-        else:
-            return 0
+        # on gère l'ordre des opération
+        indice_operateur, total =  gestion_operations(split_expression,indice_operateur_niveau_0,indice_operateur_niveau_1,total)
         
         # puis on efface l'opération effectuée
         del split_expression[indice_operateur-1 : indice_operateur+2]
         # pour y mettre le résultat
         split_expression.insert(indice_operateur-1,str(total))
 
-        #print(split_expression)
         # on continue tant que la longueur de l'expression est > 1
         if len(split_expression) !=1:
             total = evaluer_expression(" ".join(split_expression))
-            #print(total)
         else:
             # et sinon on retourne le résultat
             return total
-        #print(total)
     
     return total 
 
+def gestion_operations(split_expression,indice_operateur_niveau_0,indice_operateur_niveau_1,total):
+    # on regarde si le % est le premier dans la liste des indices d'operateur niveau 1
+    if "%" in split_expression and split_expression.index("%") == indice_operateur_niveau_1[0]:
+        # on cherche l'indice de l'opérateur
+        indice_operateur = indice_operateur_niveau_1[0]
+        # on fait l'opération
+        total += float(split_expression[indice_operateur-1]) % float(split_expression[indice_operateur+1]) 
+    
+    # on regarde si le * est le premier dans la liste des indices d'operateur niveau 1
+    elif "*" in split_expression and split_expression.index("*") == indice_operateur_niveau_1[0]:
+        # on cherche l'indice de l'opérateur
+        indice_operateur = split_expression.index('*')
+        # on fait l'opération
+        total += float(split_expression[indice_operateur-1]) * float(split_expression[indice_operateur+1]) 
+    
+    # on regarde si le / est le premier dans la liste des indices d'operateur niveau 1
+    elif "/" in split_expression and split_expression.index("/") == indice_operateur_niveau_1[0]:
+        # on cherche l'indice de l'opérateur
+        indice_operateur = split_expression.index('/')
+        # on fait l'opération
+        total += float(split_expression[indice_operateur-1]) / float(split_expression[indice_operateur+1]) 
+    
+    # on regarde si le + est le premier dans la liste des indices d'operateur niveau 0
+    elif "+" in split_expression and split_expression.index("+") == indice_operateur_niveau_0[0]:
+        # on cherche l'indice de l'opérateur
+        indice_operateur = split_expression.index('+')
+        # on fait l'opération
+        total += float(split_expression[indice_operateur-1]) + float(split_expression[indice_operateur+1]) 
 
-def gestion_indices_operateur(expression):
-    print(expression)
-    indice_operateur_niveau_0 = [i for i,operateur in enumerate(expression) if operateur in OPERATEUR_NIVEAU_0]
-    indice_operateur_niveau_1 = [i for i,operateur in enumerate(expression) if operateur in OPERATEUR_NIVEAU_1]
+    # on regarde si le - est le premier dans la liste des indices d'operateur niveau 0
+    elif "-" in split_expression and split_expression.index("-") == indice_operateur_niveau_0[0]:
+        # on cherche l'indice de l'opérateur
+        indice_operateur = split_expression.index('-')
+        # on fait l'opération
+        total += float(split_expression[indice_operateur-1]) - float(split_expression[indice_operateur+1]) 
+    return indice_operateur,total
+
+def gestion_indices_operateur(split_expression):
+   
+    indice_operateur_niveau_0 = [i for i,operateur in enumerate(split_expression) if operateur in OPERATEUR_NIVEAU_0]
+    indice_operateur_niveau_1 = [i for i,operateur in enumerate(split_expression) if operateur in OPERATEUR_NIVEAU_1]
     return indice_operateur_niveau_0 , indice_operateur_niveau_1
+
 
 def gestion_parentheses(expression,total):
      # mais où sont elles ?
@@ -87,7 +84,6 @@ def gestion_parentheses(expression,total):
     indice_parenthese_fermee = indice_parentheses_fermees[0]
     # on récupère l'expression entre parenthèses
     expression_entre_parenthèse = expression[indice_parenthese_ouverte+1:indice_parenthese_fermee] 
-    print(expression_entre_parenthèse)
     # et on l'envoie dans la fonction evaluer_expression
     total += evaluer_expression(expression_entre_parenthèse)
     # on remplace les parenthèse par le total calculé
