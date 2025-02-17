@@ -15,12 +15,16 @@ def evaluer_expression(expression,total=0):
     
     # on gère les parenthèses
     if "(" and ")" in expression:
+
         # mais où sont elles ?
-        indice_parenthese_ouverte = expression.index('(')
-        indice_parenthese_fermee = expression.index(')')
+        indice_parentheses_ouvertes, indice_parentheses_fermees  = indices_parentheses(expression)
+        print(indice_parentheses_ouvertes, indice_parentheses_fermees)
+        # on prend celles les plus à l'intèrieur
+        indice_parenthese_ouverte = indice_parentheses_ouvertes[-1]
+        indice_parenthese_fermee = indice_parentheses_fermees[0]
         # on récupère l'expression entre parenthèses
         expression_entre_parenthèse = expression[indice_parenthese_ouverte+1:indice_parenthese_fermee] 
-        # print(expression_entre_parenthèse)
+        print(expression_entre_parenthèse)
         # et on l'envoie dan le fonction
         total += evaluer_expression(expression_entre_parenthèse)
         # on remplace les parenthèse par le total calculé
@@ -28,7 +32,7 @@ def evaluer_expression(expression,total=0):
         # puis on renvoie dans la fonction
         total = evaluer_expression(expression)
 
-    else:
+    else: # il faut encore gérer gauche à dooite à priorité égale
         # on gère le modulo
         if "%" in expression:
             # on cherche l'indice de l'opérateur
@@ -79,7 +83,14 @@ def evaluer_expression(expression,total=0):
             return total
         #print(total)
     
-    return total      
+    return total 
+
+
+def indices_parentheses(expression):
+    ouvertes = [i for i, parenthese_ouverte in enumerate(expression) if parenthese_ouverte == '(']
+    fermees = [i for i, parenthese_fermee in enumerate(expression) if parenthese_fermee == ')']
+    return ouvertes, fermees
+
 
 def verification_arguments(arguments):
     ok = True
@@ -105,6 +116,7 @@ if __name__ == "__main__":
         # on utilise la fonction eval pour vérifier si c'est juste
         resultat_eval = eval(arguments[0])
         # si c'est juste on affiche sinon erreur
+        print(resultat,resultat_eval)
         if resultat == resultat_eval:
             afficher(resultat)
         else:
