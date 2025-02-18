@@ -67,11 +67,24 @@ def verification_arguments(arguments):
 
 
 def afficher(result, board =[], to_find=[], i=0 , j=0):
-    m = n =0
-    if result == True:
+    
+    if result:
         print("Trouvé !")
-        print(f"Coordonées : {i},{j}")
-       
+        print(f"Coordonnées : {i},{j}")
+
+        for k in range(len(board)):  
+            for l in range(len(board[0])):  
+                # on regarde
+                if i <= k < i + len(to_find) and j <= l < j + len(to_find[0]):
+                    # gestion des vides
+                    if to_find[k - i][l - j] != " ":
+                        print(to_find[k - i][l - j], end="") 
+                    else:
+                        print("-", end="")
+                else:
+                    print("-", end="")
+            print()  
+
     else:
         print("Introuvable")
 
