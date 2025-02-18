@@ -43,7 +43,7 @@ def find_pattern(board, to_find, board_height_pos, board_width_pos):
     return True
 
 
-def load_files(file_name):
+def load_file(file_name):
     fichier = path_ / file_name
     try:
         with open(fichier, "r", encoding="utf-8") as fichier:
@@ -96,8 +96,8 @@ def erreur():
 def main():
     arguments = sys.argv[1:]
     if verification_arguments(arguments):
-        board = load_files(arguments[0])
-        to_find = load_files(arguments[1])
+        board = load_file(arguments[0])
+        to_find = load_file(arguments[1])
         if board and to_find:
             resultat = trouver_une_forme(board,to_find)
             if not resultat:
