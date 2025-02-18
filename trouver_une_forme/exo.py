@@ -3,7 +3,7 @@ import sys
 from pprint import pprint
 from pathlib import Path
 
-chemin = Path.cwd()
+path_ = Path.cwd()
 
 
 def trouver_une_forme(board,to_find):
@@ -11,11 +11,9 @@ def trouver_une_forme(board,to_find):
     board_width = len(board[0])
     to_find_height = len(to_find)
     to_find_width = len(to_find[0])
-    result = False
 
     # on sauvegarde la première valeur à trouver
     to_find_first_value = "".join(to_find[0]).strip()[0]
-    print("first value",to_find_first_value)
 
     # on regarde si la matrice à rechercher n'est pas plus grande que le tableau
     if to_find_height > board_height or to_find_width > board_width:
@@ -26,34 +24,31 @@ def trouver_une_forme(board,to_find):
         for j in range(board_width - to_find_width + 1):
                     if board[i][j] == to_find_first_value:
                         result = find_pattern(board, to_find, i, j)
+                        
                         if result == True:
+                            afficher(result, board, to_find,i ,j)
                             return True
-    return result
+    return False
 
 
 def find_pattern(board, to_find, board_height_pos, board_width_pos):
     to_find_height = len(to_find)
     to_find_width = len(to_find[0])
 
-    print(to_find_height,to_find_width)
-
-    print('find patern',board_height_pos,board_width_pos)
-    
     for i in range(to_find_height):
         for j in range(to_find_width):
-            print("range",i,j,board[board_height_pos + i][board_width_pos + j],to_find[i][j])
             if to_find[i][j] != " ":
                 if board[board_height_pos + i][board_width_pos + j] != to_find[i][j]:
                     return False
     return True
 
 
-
-def charger_fichier(nom_fichier):
-    fichier = chemin / nom_fichier
+def load_files(file_name):
+    fichier = path_ / file_name
     try:
         with open(fichier, "r", encoding="utf-8") as fichier:
-            resultat = [list(ligne.rstrip("\n")) for ligne in fichier]
+            # On met le fichier en liste par ligne seulement si la ligne n'est pas vide
+            resultat = [list(ligne.rstrip("\n")) for ligne in fichier if ligne]
         return resultat
     except FileNotFoundError:
         print(f"Erreur : Le fichier {fichier.name} n'existe pas.")
@@ -71,8 +66,14 @@ def verification_arguments(arguments):
     return ok
 
 
-def afficher(chaine):
-   pass
+def afficher(result, board =[], to_find=[], i=0 , j=0):
+    m = n =0
+    if result == True:
+        print("Trouvé !")
+        print(f"Coordonées : {i},{j}")
+       
+    else:
+        print("Introuvable")
 
 
 def erreur():
@@ -82,11 +83,12 @@ def erreur():
 def main():
     arguments = sys.argv[1:]
     if verification_arguments(arguments):
-        board = charger_fichier(arguments[0])
-        to_find = charger_fichier(arguments[1])
+        board = load_files(arguments[0])
+        to_find = load_files(arguments[1])
         if board and to_find:
             resultat = trouver_une_forme(board,to_find)
-            print("resultat",resultat)
+            if not resultat:
+                afficher(resultat)
         else:
             erreur()   
     else:
