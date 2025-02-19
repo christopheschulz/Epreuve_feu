@@ -6,41 +6,9 @@ from pathlib import Path
 path_ = Path.cwd()
 
 
-def find_pattern_in_board(board,to_find):
-    board_height = len(board)
-    board_width = len(board[0])
-    to_find_height = len(to_find)
-    to_find_width = len(to_find[0])
+def sudoku_resolve(board,to_find):
+   pass
 
-    # on sauvegarde la première valeur à trouver
-    to_find_first_value = "".join(to_find[0]).strip()[0]
-
-    # on regarde si la matrice à rechercher n'est pas plus grande que le tableau
-    if to_find_height > board_height or to_find_width > board_width:
-        return False
-    
-    # on recherche la première correspondance du pattern dans le tableau
-    for i in range(board_height - to_find_height + 1):
-        for j in range(board_width - to_find_width + 1):
-                    if board[i][j] == to_find_first_value:
-                        result = pattern_is_in(board, to_find, i, j)
-                        
-                        if result == True:
-                            afficher(result, board, to_find,i ,j)
-                            return True
-    return False
-
-
-def pattern_is_in(board, to_find, board_height_pos, board_width_pos):
-    to_find_height = len(to_find)
-    to_find_width = len(to_find[0])
-
-    for i in range(to_find_height):
-        for j in range(to_find_width):
-            if to_find[i][j] != " ":
-                if board[board_height_pos + i][board_width_pos + j] != to_find[i][j]:
-                    return False
-    return True
 
 
 def load_file(file_name):
@@ -96,14 +64,8 @@ def erreur():
 def main():
     arguments = sys.argv[1:]
     if verification_arguments(arguments):
-        board = load_file(arguments[0])
-        to_find = load_file(arguments[1])
-        if board and to_find:
-            resultat = find_pattern_in_board(board,to_find)
-            if not resultat:
-                afficher(resultat)
-        else:
-            erreur()   
+        sudoku = load_file(arguments[0])
+    
     else:
         erreur()
 
