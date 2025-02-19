@@ -7,25 +7,28 @@ path_ = Path.cwd()
 
 
 def sudoku_resolve(sudoku):
-    # on cherche une cas vide
+    # on cherche une case vide
     case = find_empty_box(sudoku)
     
     # si plus de case vide alors c'est gagné
     if not case:
         return True  
     
+    # coordonnées de la case vide
     line, col = case
 
     for num in range(1, 10):  
         if is_valid(sudoku, line, col, num):
+            # notre fichier sudoku est une chaine de caractère d'où le str()
             sudoku[line][col] = str(num)  
 
             if sudoku_resolve(sudoku):  
                 return True
-            #on remet un point si c'est pas la solution
+            # on remet un point si c'est pas la solution
             sudoku[line][col] = "." 
 
     return False  
+
 
 def find_empty_box(sudoku):
     for i in range(9):
@@ -34,12 +37,15 @@ def find_empty_box(sudoku):
                 return i, j 
     return None  
 
+
 def is_valid(sudoku, line, col, num):
     # Vérifier la ligne
+    # notre fichier sudoku est une chaine de caractère d'où le str()
     if str(num) in sudoku[line]:
         return False
     
     # Vérifier la colonne
+    # notre fichier sudoku est une chaine de caractère d'où le str()
     if str(num) in [sudoku[i][col] for i in range(9)]:
         return False
     
@@ -47,6 +53,7 @@ def is_valid(sudoku, line, col, num):
     start_line, start_col = (line // 3) * 3, (col // 3) * 3
     for i in range(3):
         for j in range(3):
+            # notre fichier sudoku est une chaine de caractère d'où le str()
             if sudoku[start_line + i][start_col + j] == str(num):
                 return False
     
