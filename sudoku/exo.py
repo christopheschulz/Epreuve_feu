@@ -1,6 +1,5 @@
 import sys
 
-from pprint import pprint
 from pathlib import Path
 
 path_ = Path.cwd()
@@ -66,6 +65,14 @@ def load_file(file_name):
         with open(fichier, "r", encoding="utf-8") as fichier:
             # On met le fichier en liste par ligne seulement si la ligne n'est pas vide
             resultat = [list(ligne.rstrip("\n")) for ligne in fichier if ligne]
+        
+            # on vérifie les longeurs du tableau de sudoku
+            len_resultat_ok = len(resultat) == 9 and all(len(i)==9 for i in resultat)
+        
+        if  not len_resultat_ok:
+            print("le tableau d'entré n'as pas le bon format")
+            return []
+
         return resultat
     except FileNotFoundError:
         print(f"Erreur : Le fichier {fichier.name} n'existe pas.")
@@ -73,7 +80,7 @@ def load_file(file_name):
     except Exception as e:
         print(f"Une erreur s'est produite : {e}")
         return []
-
+    
    
 def verification_arguments(arguments):
     ok = False
@@ -99,9 +106,10 @@ def main():
     arguments = sys.argv[1:]
     if verification_arguments(arguments):
         sudoku = load_file(arguments[0])
-        result = sudoku_resolve(sudoku)
-        if result:
-            afficher(sudoku)  
+        if sudoku:
+            result = sudoku_resolve(sudoku)
+            if result:
+                afficher(sudoku)  
     else:
         erreur()
 
