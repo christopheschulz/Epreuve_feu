@@ -6,9 +6,34 @@ from pathlib import Path
 path_ = Path.cwd()
 
 
-def sudoku_resolve(board,to_find):
-   pass
+def sudoku_resolve(sudoku):
+    len_sudoku = 9
+    len_line_sudoku = 9
+    line_point = 0
+    point_coordinate = 0
+    sudoku_horizontal = []
 
+    # premier passage horizontal, on regarde si 1 trou.
+    for i in range(len_sudoku):
+        line_point = 0
+        for j in range(len_line_sudoku):
+            if sudoku[i][j] == ".":
+                line_point += 1
+                point_coordinate = j
+        if line_point == 1:
+            number = find_number(sudoku[i])
+            print(f"{number} est la valeure manquante de la ligne {i+1} à la position {point_coordinate+1}")
+            sudoku[i][point_coordinate] = number
+
+    return sudoku
+    
+
+def find_number(line_sudoku):
+    sum_line_sudoku = 45
+
+    int_line_sudoku = [int(i) for i in line_sudoku if i != "."]
+    
+    return sum_line_sudoku - sum(int_line_sudoku)
 
 
 def load_file(file_name):
@@ -28,33 +53,23 @@ def load_file(file_name):
    
 def verification_arguments(arguments):
     ok = False
-    if len(arguments) == 2:
-        if arguments[0].endswith("txt") and arguments[1].endswith("txt"):
+    if len(arguments) == 1:
+        if arguments[0].endswith("txt"):
             ok = True
     return ok
 
 
-def afficher(result, board =[], to_find=[], i=0 , j=0):
+def afficher(result):
+    len_sudoku = 9
+    len_line_sudoku = 9
+
+    for i in range(len_sudoku):
+        for j in range(len_line_sudoku):
+            print(result[i][j],end="")
+        print()
+
     
-    if result:
-        print("Trouvé !")
-        print(f"Coordonnées : {i},{j}")
-
-        for k in range(len(board)):  
-            for l in range(len(board[0])):  
-                # on regarde
-                if i <= k < i + len(to_find) and j <= l < j + len(to_find[0]):
-                    # gestion des vides
-                    if to_find[k - i][l - j] != " ":
-                        print(to_find[k - i][l - j], end="") 
-                    else:
-                        print("-", end="")
-                else:
-                    print("-", end="")
-            print()  
-
-    else:
-        print("Introuvable")
+    pass
 
 
 def erreur():
@@ -65,7 +80,8 @@ def main():
     arguments = sys.argv[1:]
     if verification_arguments(arguments):
         sudoku = load_file(arguments[0])
-    
+        result = sudoku_resolve(sudoku)
+        afficher(result)
     else:
         erreur()
 
