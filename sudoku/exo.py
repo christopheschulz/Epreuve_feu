@@ -7,33 +7,50 @@ path_ = Path.cwd()
 
 
 def sudoku_resolve(sudoku):
-    len_sudoku = 9
-    len_line_sudoku = 9
-    line_point = 0
-    point_coordinate = 0
-    sudoku_horizontal = []
+    # on cherche une cas vide
+    case = find_empty_box(sudoku)
+    
+    # si plus de case vide alors c'est gagné
+    if not case:
+        return True  
+    
+    line, col = case
 
-    # premier passage horizontal, on regarde si 1 trou.
-    for i in range(len_sudoku):
-        line_point = 0
-        for j in range(len_line_sudoku):
+    for num in range(1, 10):  
+        if is_valid(sudoku, line, col, num):
+            sudoku[line][col] = str(num)  
+
+            if sudoku_resolve(sudoku):  
+                return True
+            #on remet un point si c'est pas la solution
+            sudoku[line][col] = "." 
+
+    return False  
+
+def find_empty_box(sudoku):
+    for i in range(9):
+        for j in range(9):
             if sudoku[i][j] == ".":
-                line_point += 1
-                point_coordinate = j
-        if line_point == 1:
-            number = find_number(sudoku[i])
-            print(f"{number} est la valeure manquante de la ligne {i+1} à la position {point_coordinate+1}")
-            sudoku[i][point_coordinate] = number
+                return i, j 
+    return None  
 
-    return sudoku
+def is_valid(sudoku, line, col, num):
+    # Vérifier la ligne
+    if str(num) in sudoku[line]:
+        return False
     
-
-def find_number(line_sudoku):
-    sum_line_sudoku = 45
-
-    int_line_sudoku = [int(i) for i in line_sudoku if i != "."]
+    # Vérifier la colonne
+    if str(num) in [sudoku[i][col] for i in range(9)]:
+        return False
     
-    return sum_line_sudoku - sum(int_line_sudoku)
+    # Vérifier le carré 3x3
+    start_line, start_col = (line // 3) * 3, (col // 3) * 3
+    for i in range(3):
+        for j in range(3):
+            if sudoku[start_line + i][start_col + j] == str(num):
+                return False
+    
+    return True
 
 
 def load_file(file_name):
@@ -60,16 +77,11 @@ def verification_arguments(arguments):
 
 
 def afficher(result):
-    len_sudoku = 9
-    len_line_sudoku = 9
-
-    for i in range(len_sudoku):
-        for j in range(len_line_sudoku):
+   
+    for i in range(9):
+        for j in range(9):
             print(result[i][j],end="")
         print()
-
-    
-    pass
 
 
 def erreur():
@@ -81,7 +93,8 @@ def main():
     if verification_arguments(arguments):
         sudoku = load_file(arguments[0])
         result = sudoku_resolve(sudoku)
-        afficher(result)
+        if result:
+            afficher(sudoku)  
     else:
         erreur()
 
