@@ -13,9 +13,10 @@ x = int(sys.argv[1])
 y = int(sys.argv[2])
 density = int(sys.argv[3])
 
-print(f"{y}.xo")
-for i in range(y + 1):
-    for j in range(x + 1):
-        # random.randrange(y) returns an integer from 0 to y-1, similar to Ruby's rand(y)
-        print("x" if random.randrange(y) * 2 < density else ".", end="")
-    print()
+with open('tableau.txt', 'w') as f:
+    f.write(f"{y}.xo\n")
+    for i in range(y + 1):
+        for j in range(x + 1):
+            # random.randrange(y) renvoie un entier entre 0 et y-1
+            f.write("x" if random.randrange(y) * 2 < density else ".")
+        f.write("\n")
