@@ -5,8 +5,6 @@ from pprint import pprint
 
 from pathlib import Path
 
-path_ = Path.cwd()
-arguments = sys.argv[1:]
 
 
 def find_great_square(board):
@@ -14,8 +12,8 @@ def find_great_square(board):
     len_board = len(board)
     len_line_board = len(board[0])
     
-    # Création de la matrice dp de même dimension
-    dp = [[0] * len_line_board for _ in range(len_board)]
+    # Création de la matrice square_matrix de même dimension
+    square_matrix = [[0] * len_line_board for _ in range(len_board)]
     max_size = 0
     top_left = None
 
@@ -23,14 +21,15 @@ def find_great_square(board):
         for j in range(len_line_board):
             if board[i][j] == ".":  # Case vide
                 if i == 0 or j == 0:
-                    dp[i][j] = 1
+                    square_matrix[i][j] = 1
                 else:
-                    dp[i][j] = min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]) + 1
-                if dp[i][j] > max_size:
-                    max_size = dp[i][j]
+                    square_matrix[i][j] = min(square_matrix[i-1][j], square_matrix[i][j-1], square_matrix[i-1][j-1]) + 1
+                if square_matrix[i][j] > max_size:
+                    max_size = square_matrix[i][j]
+                    # + 1
                     top_left = (i - max_size + 1, j - max_size + 1)
             else:
-                dp[i][j] = 0
+                square_matrix[i][j] = 0
 
     if top_left is None:
         return None, None, 0
@@ -38,15 +37,16 @@ def find_great_square(board):
         return top_left[0], top_left[1], max_size
 
 def load_file(file_name):
+    path_ = Path.cwd()
     fichier = path_ / file_name
     try:
         with open(fichier, "r", encoding="utf-8") as fichier:
             # On met le fichier en liste par ligne seulement si la ligne n'est pas vide
             first_line = fichier.readline().rstrip("\n")
-            resultat = [list(ligne.rstrip("\n")) for ligne in fichier if ligne]
+            board = [list(ligne.rstrip("\n")) for ligne in fichier if ligne]
             #afficher(first_line,resultat)
 
-        return first_line,resultat
+        return first_line,board
     except FileNotFoundError:
         print(f"Erreur : Le fichier {fichier.name} n'existe pas.")
         return []
@@ -56,11 +56,7 @@ def load_file(file_name):
     
    
 def verification_arguments(arguments):
-    ok = False
-    if len(arguments) == 1:
-        if arguments[0].endswith("txt"):
-            ok = True
-    return ok
+    return len(arguments) == 1 and arguments[0].endswith(".txt")
 
 
 def afficher(first_line,result,square):
@@ -86,6 +82,7 @@ def erreur():
 
 
 def main():
+    arguments = sys.argv[1:]
     if verification_arguments(arguments):
         title, board = load_file(arguments[0])
         result = find_great_square(board)
