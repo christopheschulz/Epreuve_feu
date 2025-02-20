@@ -1,10 +1,7 @@
-
-
 import sys
 from pprint import pprint
 
 from pathlib import Path
-
 
 
 def find_great_square(board):
@@ -35,6 +32,7 @@ def find_great_square(board):
         return None, None, 0
     else:
         return top_left[0], top_left[1], max_size
+
 
 def load_file(file_name):
     path_ = Path.cwd()
@@ -85,8 +83,13 @@ def main():
     arguments = sys.argv[1:]
     if verification_arguments(arguments):
         title, board = load_file(arguments[0])
-        result = find_great_square(board)
-        afficher(title,board,result)
+        len_line_board = [len(ligne) for ligne in board]
+        if board and len(set(len_line_board)) == 1:
+            result = find_great_square(board)
+            afficher(title,board,result)
+        else:
+           erreur()
+
     else:
         erreur()
 
