@@ -4,7 +4,7 @@ from pprint import pprint
 from pathlib import Path
 
 
-def find_great_square(board):
+def find_greatest_square(board):
 
     len_board = len(board)
     len_line_board = len(board[0])
@@ -41,7 +41,7 @@ def load_file(file_name):
         with open(fichier, "r", encoding="utf-8") as fichier:
             # On met le fichier en liste par ligne seulement si la ligne n'est pas vide
             first_line = fichier.readline().rstrip("\n")
-            board = [list(ligne.rstrip("\n")) for ligne in fichier if ligne]
+            board = [list(ligne.rstrip("\n")) for ligne in fichier]
             #afficher(first_line,resultat)
 
         return first_line,board
@@ -53,11 +53,28 @@ def load_file(file_name):
         return []
     
    
-def verification_arguments(arguments):
+def args_are_valid(arguments):
     return len(arguments) == 1 and arguments[0].endswith(".txt")
 
 
-def afficher(first_line,result,square):
+def board_is_valid(title ,board):
+    if not board:
+        return False
+
+    len_line_board = [len(ligne) for ligne in board]
+    if len(set(len_line_board)) != 1:
+        return False
+    
+    allowed_charachter = set(title[-3:])
+    for ligne in board:
+        for caractere in ligne:
+            if caractere not in allowed_charachter:
+                return False
+    
+    return True
+
+
+def display(first_line,result,square):
     len_result = len(result)
     len_line_result = len(result[0])
     
@@ -75,23 +92,23 @@ def afficher(first_line,result,square):
         print()
 
 
-def erreur():
+def error():
     print("error")
 
 
 def main():
     arguments = sys.argv[1:]
-    if verification_arguments(arguments):
+    if args_are_valid(arguments):
         title, board = load_file(arguments[0])
-        len_line_board = [len(ligne) for ligne in board]
-        if board and len(set(len_line_board)) == 1:
-            result = find_great_square(board)
-            afficher(title,board,result)
+        
+        if  board_is_valid(title,board):
+            result = find_greatest_square(board)
+            display(title,board,result)
         else:
-           erreur()
+           error()
 
     else:
-        erreur()
+        error()
 
 
 if __name__ == "__main__":
