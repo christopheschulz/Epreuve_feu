@@ -15,8 +15,8 @@ density = int(sys.argv[3])
 
 with open('tableau.txt', 'w') as f:
     f.write(f"{y}.xo\n")
-    for i in range(y + 1):
-        for j in range(x + 1):
+    for i in range(y):
+        for j in range(x):
             # random.randrange(y) renvoie un entier entre 0 et y-1
             f.write("x" if random.randrange(y) * 2 < density else ".")
         f.write("\n")
