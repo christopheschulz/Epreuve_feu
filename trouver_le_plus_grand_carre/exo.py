@@ -9,29 +9,6 @@ def find_greatest_square(board):
     len_board = len(board)
     len_line_board = len(board[0])
     
-    # Création de la matrice square_matrix de même dimension
-    square_matrix = [[0] * len_line_board for _ in range(len_board)]
-    max_size = 0
-    top_left = None
-
-    for i in range(len_board):
-        for j in range(len_line_board):
-            if board[i][j] == ".":  # Case vide
-                if i == 0 or j == 0:
-                    square_matrix[i][j] = 1
-                else:
-                    square_matrix[i][j] = min(square_matrix[i-1][j], square_matrix[i][j-1], square_matrix[i-1][j-1]) + 1
-                if square_matrix[i][j] > max_size:
-                    max_size = square_matrix[i][j]
-                    # + 1
-                    top_left = (i - max_size + 1, j - max_size + 1)
-            else:
-                square_matrix[i][j] = 0
-
-    if top_left is None:
-        return None, None, 0
-    else:
-        return top_left[0], top_left[1], max_size
 
 
 def load_file(file_name):
