@@ -48,6 +48,34 @@ def escape_maze(title,maze,start,end):
     # - (0, 1) : déplacement vers la droite.
 
     directions = [(-1, 0),(1, 0),(0, -1),(0, 1)]
+
+    while queue:
+        current = queue.popleft()
+        if current == end:
+            break
+        for d in directions:
+            next_row = current[0] + d[0]
+            next_col = current[1] + d[1]
+            next_cell = (next_row, next_col)
+            if 0 <= next_row < rows and 0 <= next_col < cols:
+                if not visited[next_row][next_col] and maze[next_row][next_col] != wall_slot:
+                    queue.append(next_cell)
+                    visited[next_row][next_col] = True
+                    previous[next_cell] = current  # Sauvegarder le chemin
+
+    if end not in previous and start != end:
+        return None
+
+    path = []
+    cell = end
+    while cell != start:
+        path.append(cell)
+        cell = previous[cell]
+    path.append(start)
+    path.reverse() 
+
+    return path
+
     
 
 
@@ -97,7 +125,7 @@ def board_is_valid(title ,maze):
     return True
 
 
-def display(first_line,maze,square):
+def display(first_line,maze,result):
     len_maze = len(maze)
     len_line_maze = len(maze[0])
     
@@ -127,6 +155,7 @@ def main():
            start, end = search_start_end(title,maze)
            if start and end:
                result = escape_maze(title,maze,start,end)
+               print(result)
                
         else:
            error()
