@@ -8,8 +8,22 @@ def find_greatest_square(board):
 
     len_board = len(board)
     len_line_board = len(board[0])
+    # declarer la matrice de carré
+    square_matrix = [[0]*len_line_board for _ in range(len_board)]
+    max_square_size = 0
     
-
+    for i in range(len_board):
+        for j in range(len_line_board):
+            if board[i][j] == ".":
+                if i == 0 and j == 0:
+                    square_matrix[i][j] = 0
+                else: # on vérifie les valeurs dans les cases juste avant , en diagonale avant ,  juste audessus                               
+                    square_matrix[i][j] = min(square_matrix[i][j-1],square_matrix[i-1][j-1],square_matrix[i-1][j]) + 1
+            if square_matrix[i][j] > max_square_size:
+                max_square_size = square_matrix[i][j]
+                x,y = (i - max_square_size ) + 1 , (j - max_square_size ) + 1
+    
+    return x,y,max_square_size
 
 def load_file(file_name):
     path_ = Path.cwd()
@@ -51,21 +65,21 @@ def board_is_valid(title ,board):
     return True
 
 
-def display(first_line,result,square):
-    len_result = len(result)
-    len_line_result = len(result[0])
+def display(first_line,board,square):
+    len_board = len(board)
+    len_line_board = len(board[0])
     
     x, y, square_size = square
 
     print(x, y , square_size)
 
     print(first_line)
-    for i in range(len_result):
-        for j in range(len_line_result):
+    for i in range(len_board):
+        for j in range(len_line_board):
             if x <= i < x + square_size and y <= j < y + square_size:
                 print("o",end="")
             else: 
-                print(result[i][j],end="")
+                print(board[i][j],end="")
         print()
 
 
