@@ -26,6 +26,7 @@ def search_start_end(title,maze):
 
     return None, None
 
+
 def escape_maze(title,maze,start,end):
     maze_parameters = title[-5:]
     wall_slot = maze_parameters[0]
@@ -66,6 +67,8 @@ def escape_maze(title,maze,start,end):
     if end not in previous and start != end:
         return None
 
+    print (previous)
+    
     path = []
     cell = end
     while cell != start:
@@ -77,10 +80,7 @@ def escape_maze(title,maze,start,end):
     return path
 
     
-
-
 def load_file(file_name):
-    print("load file")
     path_ = Path.cwd()
     fichier = path_ / file_name
     try:
@@ -100,12 +100,10 @@ def load_file(file_name):
     
    
 def args_are_valid(arguments):
-    print('args are valid')
     return len(arguments) == 1 and arguments[0].endswith(".map")
 
 
 def board_is_valid(title ,maze):
-    print("board is valid")
     dimension_maze = title[:-5]
     x_index = dimension_maze.index("x")
     cols = int(dimension_maze[:x_index])
@@ -129,17 +127,15 @@ def display(first_line,maze,result):
     len_maze = len(maze)
     len_line_maze = len(maze[0])
     
-    x, y, square_size = square
-
-    print(x, y , square_size)
-
     print(first_line)
     for i in range(len_maze):
         for j in range(len_line_maze):
-            if x <= i < x + square_size and y <= j < y + square_size:
-                print("o",end="")
-            else: 
-                print(maze[i][j],end="")
+            for r in result:
+                if maze[i][j] != "1" and maze[i][j] != "2":
+                    if i == r[0] and j == r[1]:
+                        maze[i][j] = "o"
+            
+            print(maze[i][j],end="")
         print()
 
 
@@ -155,7 +151,7 @@ def main():
            start, end = search_start_end(title,maze)
            if start and end:
                result = escape_maze(title,maze,start,end)
-               print(result)
+               display(title,maze,result)
                
         else:
            error()
