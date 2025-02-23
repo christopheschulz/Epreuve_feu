@@ -34,13 +34,10 @@ def escape_maze(title,maze,start,end):
     rows = len(maze)
     cols = len(maze[0])
 
-    visited = [[False] * cols for _ in range(rows)]
-
-    previous = {}
-
-    queue = deque([start])
-
-    visited[start[0]][start[1]] = True
+    #initialiser le tableau de gestion case visitée
+    case_visitee = [[False] * cols for _ in range(rows)]
+    # initialiser le dictionnaire de chemins
+    precedemment = {}
 
     # - Définir les déplacements possibles depuis une cellule :
     # - (-1, 0) : déplacement vers le haut.
@@ -50,34 +47,28 @@ def escape_maze(title,maze,start,end):
 
     directions = [(-1, 0),(1, 0),(0, -1),(0, 1)]
 
-    while queue:
-        current = queue.popleft()
-        if current == end:
+    fifo = deque([start])
+
+    case_visitee[start[0]][start[1]] = True
+
+    while fifo:
+
+        courant = fifo.popleft()
+        if courant == end:
             break
+        
         for d in directions:
-            next_row = current[0] + d[0]
-            next_col = current[1] + d[1]
-            next_cell = (next_row, next_col)
-            if 0 <= next_row < rows and 0 <= next_col < cols:
-                if not visited[next_row][next_col] and maze[next_row][next_col] != wall_slot:
-                    queue.append(next_cell)
-                    visited[next_row][next_col] = True
-                    previous[next_cell] = current  # Sauvegarder le chemin
+            prochaine_ligne = courant[0] + d[0]
+            prochaine_colonne = courant[1] + d[1]
+            prochaine_case = (prochaine_ligne,prochaine_colonne)
 
-    if end not in previous and start != end:
-        return None
+            if 0 <= prochaine_ligne < rows and 0 <= prochaine_colonne < cols:
+                if not case_visitee[prochaine_ligne,prochaine_colonne] and maze[prochaine_ligne,prochaine_colonne] != wall_slot:
+                    fifo.append(prochaine_case)
+                    case_visitee[prochaine_ligne,prochaine_colonne] = True
+                    precedemment[prochaine_case] = courant
 
-    print (previous)
-    
-    path = []
-    cell = end
-    while cell != start:
-        path.append(cell)
-        cell = previous[cell]
-    path.append(start)
-    path.reverse() 
-
-    return path
+    # return path
 
     
 def load_file(file_name):
@@ -151,7 +142,7 @@ def main():
            start, end = search_start_end(title,maze)
            if start and end:
                result = escape_maze(title,maze,start,end)
-               display(title,maze,result)
+               #display(title,maze,result)
                
         else:
            error()
