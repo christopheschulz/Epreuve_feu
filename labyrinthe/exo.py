@@ -63,12 +63,21 @@ def escape_maze(title,maze,start,end):
             prochaine_case = (prochaine_ligne,prochaine_colonne)
 
             if 0 <= prochaine_ligne < rows and 0 <= prochaine_colonne < cols:
-                if not case_visitee[prochaine_ligne,prochaine_colonne] and maze[prochaine_ligne,prochaine_colonne] != wall_slot:
+                if not case_visitee[prochaine_ligne][prochaine_colonne] and maze[prochaine_ligne][prochaine_colonne] != wall_slot:
                     fifo.append(prochaine_case)
-                    case_visitee[prochaine_ligne,prochaine_colonne] = True
+                    case_visitee[prochaine_ligne][prochaine_colonne] = True
                     precedemment[prochaine_case] = courant
+        path = []
 
-    # return path
+    case_ = end
+    while case_ != start:
+        path.append(case_)
+        case_ = precedemment[case_]
+    path.append(start)
+    path.reverse()  # Inverser
+
+
+    return path
 
     
 def load_file(file_name):
@@ -142,7 +151,7 @@ def main():
            start, end = search_start_end(title,maze)
            if start and end:
                result = escape_maze(title,maze,start,end)
-               #display(title,maze,result)
+               display(title,maze,result)
                
         else:
            error()
