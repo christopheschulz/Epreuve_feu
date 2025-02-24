@@ -4,7 +4,7 @@ import sys
 def afficher_rectangle(line,columns):
     line = int(line)
     columns = int(columns)
-    charactère = ""
+    char = ""
     # afficher colonne
     for i in range(columns):
         # afficher ligne
@@ -13,46 +13,45 @@ def afficher_rectangle(line,columns):
             if i == 0 or i == columns-1:
                 # si début et fin de ligne on dessine avec o 
                 if j == 0 or j == line-1:
-                    charactère = "o"
+                    char = "o"
                 # sinon on dessine avec -
                 else:
-                    charactère = "-"
-                print(charactère,end="")
+                    char = "-"
+                print(char,end="")
             # sinon on dessine avec | et espace
             else:
                 # si début et fin de ligne on dessine avec |
                 if j == 0 or j == line-1:
-                    charactère = "|"
+                    char = "|"
                 # sinon on dessine avec un espace
                 else:
-                    charactère = " "
-                print(charactère,end="")
+                    char = " "
+                print(char,end="")
         print()
         
 
-
-def verification_arguments(arguments):
-    ok = False
-    if len(arguments) == 2 and "0" not in arguments:
-        if arguments[0].isdigit() and arguments[1].isdigit() == 1:
-            ok = True
-    return ok
-
-
-def afficher(chaine):
-   pass
-
-
-def erreur():
-    print("error")
-
-
-if __name__ == "__main__":
+def main():
     arguments = sys.argv[1:]
-    if verification_arguments(arguments):
+    if args_are_valid(arguments):
        line = arguments[0]
        columns = arguments[1]
        afficher_rectangle(line,columns)
+    
+
+def args_are_valid(arguments):
+
+    if len(arguments) != 2:
+        print("Deux arguments sont attendus (ligne,colonne) !")
+        return False
+    if "0" in arguments:
+        print("Aucun zéro ne doit être présent dans vos arguments !")
+        return False
+    if not all(argument.isdigit() for argument in arguments):
+        print("Tous vos arguments doivent être des chiffres !")
+        return False
         
-    else:
-        erreur()
+    return True
+
+
+if __name__ == "__main__":
+    main()

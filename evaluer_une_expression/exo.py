@@ -69,6 +69,7 @@ def gestion_operations(split_expression,indice_operateur_niveau_0,indice_operate
         total += float(split_expression[indice_operateur-1]) - float(split_expression[indice_operateur+1]) 
     return indice_operateur,total
 
+
 def gestion_indices_operateur(split_expression):
    
     indice_operateur_niveau_0 = [i for i,operateur in enumerate(split_expression) if operateur in OPERATEUR_NIVEAU_0]
