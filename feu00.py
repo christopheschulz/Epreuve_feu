@@ -1,57 +1,71 @@
 import sys
 
 
-def afficher_rectangle(line,columns):
-    line = int(line)
-    columns = int(columns)
+def display_rectangle(rows,columns):
     char = ""
-    # afficher colonne
     for i in range(columns):
-        # afficher ligne
-        for j in range(line):
-            # si début et fin de rectangle on dessine avec o et -
+        for j in range(rows):
             if i == 0 or i == columns-1:
-                # si début et fin de ligne on dessine avec o 
-                if j == 0 or j == line-1:
-                    char = "o"
-                # sinon on dessine avec -
-                else:
-                    char = "-"
-                print(char,end="")
-            # sinon on dessine avec | et espace
+                start_end_rows(j,rows)
             else:
-                # si début et fin de ligne on dessine avec |
-                if j == 0 or j == line-1:
-                    char = "|"
-                # sinon on dessine avec un espace
-                else:
-                    char = " "
-                print(char,end="")
+                intermediate_row(j,rows)
         print()
+
+
+def start_end_rows(j,rows):
+    
+    if j == 0 or j == rows-1:
+        char = "o"
+    else:
+        char = "-"
+    print(char,end="")
+
+
+def intermediate_row(j,rows):
+     # si début et fin de ligne on dessine avec |
+    if j == 0 or j == rows-1:
+        char = "|"
+    # sinon on dessine avec un espace
+    else:
+        char = " "
+    print(char,end="")
+
+
+def get_arguments():
+    arguments = sys.argv[1:]
+    return arguments
+    
+    
+def len_arguments_is_valid(arguments,lenght):
+    return len(arguments) == lenght
+
+
+def zero_in_argument(argument):
+    return argument == 0
+
+
+def is_digit(argument):
+    return argument.isdigit()
         
+
+def error(e):
+    print(e)
+
 
 def main():
-    arguments = sys.argv[1:]
-    if args_are_valid(arguments):
-       line = arguments[0]
-       columns = arguments[1]
-       afficher_rectangle(line,columns)
-    
-
-def args_are_valid(arguments):
-
-    if len(arguments) != 2:
-        print("Deux arguments sont attendus (ligne,colonne) !")
-        return False
-    if "0" in arguments:
-        print("Aucun zéro ne doit être présent dans vos arguments !")
-        return False
-    if not all(argument.isdigit() for argument in arguments):
-        print("Tous vos arguments doivent être des chiffres !")
-        return False
-        
-    return True
+    arguments = get_arguments()
+    if not len_arguments_is_valid(arguments,2):
+        return
+    for argument in arguments:
+        if not is_digit(argument):
+            error("l'argument n'est pas un digit")
+            return
+        if zero_in_argument(int(argument)):
+            error("erreur 0 dans argument")
+            return
+    rows = int(arguments[0])
+    columns = int(arguments[1])
+    display_rectangle(rows,columns)
 
 
-if __name__ == "__main__":
-    main()
+main()
