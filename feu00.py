@@ -63,7 +63,7 @@ def error_handling(arguments):
     return True
 
 
-def main():
+def warm_up():
     arguments = get_arguments()
     if error_handling(arguments):
         rows = int(arguments[0])
@@ -71,4 +71,4 @@ def main():
         display_rectangle(rows,columns)
 
 
-main()
+warm_up()
