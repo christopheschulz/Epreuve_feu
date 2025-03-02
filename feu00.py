@@ -6,13 +6,13 @@ def display_rectangle(rows,columns):
     for i in range(columns):
         for j in range(rows):
             if i == 0 or i == columns-1:
-                start_end_rows(j,rows)
+                display_start_end_rows(j,rows)
             else:
-                intermediate_row(j,rows)
+                display_intermediate_row(j,rows)
         print()
 
 
-def start_end_rows(j,rows):
+def display_start_end_rows(j,rows):
     
     if j == 0 or j == rows-1:
         char = "o"
@@ -21,7 +21,7 @@ def start_end_rows(j,rows):
     print(char,end="")
 
 
-def intermediate_row(j,rows):
+def display_intermediate_row(j,rows):
      # si début et fin de ligne on dessine avec |
     if j == 0 or j == rows-1:
         char = "|"
@@ -40,7 +40,7 @@ def len_arguments_is_valid(arguments,lenght):
     return len(arguments) == lenght
 
 
-def zero_in_argument(argument):
+def has_zero_in_argument(argument):
     return argument == 0
 
 
@@ -48,24 +48,27 @@ def is_digit(argument):
     return argument.isdigit()
         
 
-def error(e):
-    print(e)
+def error_handling(arguments):
+    arguments_lenght = 2
+    if not len_arguments_is_valid(arguments,arguments_lenght):
+        print(f"Le nombre d'agument doit être de {arguments_lenght}")
+        return False
+    for argument in arguments:
+        if not is_digit(argument):
+            print("l'argument n'est pas un digit")
+            return False
+        if has_zero_in_argument(int(argument)):
+            print("erreur 0 dans argument")
+            return False
+    return True
 
 
 def main():
     arguments = get_arguments()
-    if not len_arguments_is_valid(arguments,2):
-        return
-    for argument in arguments:
-        if not is_digit(argument):
-            error("l'argument n'est pas un digit")
-            return
-        if zero_in_argument(int(argument)):
-            error("erreur 0 dans argument")
-            return
-    rows = int(arguments[0])
-    columns = int(arguments[1])
-    display_rectangle(rows,columns)
+    if error_handling(arguments):
+        rows = int(arguments[0])
+        columns = int(arguments[1])
+        display_rectangle(rows,columns)
 
 
 main()
