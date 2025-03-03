@@ -65,10 +65,11 @@ def has_error(arguments):
 
 def warm_up():
     arguments = get_arguments()
-    if not has_error(arguments):
-        rows = int(arguments[0])
-        columns = int(arguments[1])
-        display_rectangle(rows,columns)
+    if has_error(arguments):
+        return
+    rows = int(arguments[0])
+    columns = int(arguments[1])
+    display_rectangle(rows,columns)
 
 
 warm_up()
