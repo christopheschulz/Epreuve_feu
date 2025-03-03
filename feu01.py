@@ -17,11 +17,13 @@ def evaluer_expression(expression):
     
     return float(split_expression[0])
 
+
 def decouper_expression(expression):
     # Ajouter des espaces autour des opérateurs pour un découpage plus précis
     for op in OPERATEUR_NIVEAU_0 + OPERATEUR_NIVEAU_1:
         expression = expression.replace(op, f' {op} ')
     return expression.split()
+
 
 def evaluer_parentheses(expression):
     ouvertes, fermees = indices_parentheses(expression)
@@ -38,6 +40,7 @@ def evaluer_parentheses(expression):
     )
     return nouvelle_expression
 
+
 def gerer_operations(expression, operateurs):
     i = 0
     while i < len(expression):
@@ -50,6 +53,7 @@ def gerer_operations(expression, operateurs):
         else:
             i += 1
     return expression
+
 
 def effectuer_operation(a, b, operateur):
     if operateur == "+":
@@ -67,12 +71,14 @@ def effectuer_operation(a, b, operateur):
     elif operateur == "%":
         return a % b
 
+
 def indices_parentheses(expression):
     ouvertes = [i for i, c in enumerate(expression) if c == '(']
     fermees = [i for i, c in enumerate(expression) if c == ')']
     return ouvertes, fermees
 
-def afficher(resultat):
+
+def display(resultat):
     if resultat == int(resultat):
         print(int(resultat))
     else:
@@ -87,13 +93,13 @@ def main():
         resultat = evaluer_expression(expression)
         resultat_eval = eval(expression)
         if resultat == resultat_eval:
-            afficher(resultat)
+            display(resultat)
         else:
             print("Le résultat n'est pas correcte")
     except Exception as e:
         print(f"Erreur : {e}")
 
-if __name__ == "__main__":
-    main()
+
+main()
     
    

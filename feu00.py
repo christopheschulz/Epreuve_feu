@@ -48,24 +48,24 @@ def is_digit(argument):
     return argument.isdigit()
         
 
-def error_handling(arguments):
+def has_error(arguments):
     arguments_lenght = 2
     if not len_arguments_is_valid(arguments,arguments_lenght):
         print(f"Le nombre d'agument doit être de {arguments_lenght}")
-        return False
+        return True
     for argument in arguments:
         if not is_digit(argument):
             print("l'argument n'est pas un digit")
-            return False
+            return True
         if has_zero_in_argument(int(argument)):
             print("erreur 0 dans argument")
-            return False
-    return True
+            return True
+    return False
 
 
 def warm_up():
     arguments = get_arguments()
-    if error_handling(arguments):
+    if not has_error(arguments):
         rows = int(arguments[0])
         columns = int(arguments[1])
         display_rectangle(rows,columns)
