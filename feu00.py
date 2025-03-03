@@ -2,18 +2,16 @@ import sys
 
 
 def display_rectangle(rows,columns):
-    char = ""
     for i in range(columns):
         for j in range(rows):
             if i == 0 or i == columns-1:
-                display_start_end_rows(j,rows)
+                display_edge_rows(j,rows)
             else:
                 display_intermediate_row(j,rows)
         print()
 
 
-def display_start_end_rows(j,rows):
-    
+def display_edge_rows(j,rows):
     if j == 0 or j == rows-1:
         char = "o"
     else:
