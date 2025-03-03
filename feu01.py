@@ -1,105 +1,115 @@
 import sys
 
-OPERATEUR_NIVEAU_0 = ["-", "+"]
-OPERATEUR_NIVEAU_1 = ["*", "/", "//", "%"]
+OPERATORS_LEVEL_0 = ["-", "+"]
+OPERATORS_LEVEL_1 = ["*", "/", "//", "%"]
+OPERATORS = OPERATORS_LEVEL_1 + OPERATORS_LEVEL_0
 
-def evaluer_expression(expression):
+def expression_evaluation(expression):
     # Gérer les parenthèses récursivement
     while "(" in expression:
-        expression = evaluer_parentheses(expression)
+        expression = evaluation_of_the_expression_between_brackets(expression)
     
     # Évaluation sans parenthèses
-    split_expression = decouper_expression(expression)
+    
+    split_expression = splitting_expression(expression)
     while len(split_expression) > 1:
         # Gérer les opérations de niveau 1 en priorité
-        split_expression = gerer_operations(split_expression, OPERATEUR_NIVEAU_1)
-        split_expression = gerer_operations(split_expression, OPERATEUR_NIVEAU_0)
+        
+        split_expression = manage_operations(split_expression, OPERATORS_LEVEL_1)
+        
+        split_expression = manage_operations(split_expression, OPERATORS_LEVEL_0)
     
     return float(split_expression[0])
 
 
-def decouper_expression(expression):
+def splitting_expression(expression):
     # Ajouter des espaces autour des opérateurs pour un découpage plus précis
-    for op in OPERATEUR_NIVEAU_0 + OPERATEUR_NIVEAU_1:
+    for op in OPERATORS:
         expression = expression.replace(op, f' {op} ')
     return expression.split()
 
 
-def evaluer_parentheses(expression):
-    ouvertes, fermees = indices_parentheses(expression)
-    derniere_ouverte = ouvertes[-1]
-    premiere_fermee = next(f for f in fermees if f > derniere_ouverte)
+def evaluation_of_the_expression_between_brackets(expression):
+    opened = [i for i, char in enumerate(expression) if char == '(']
+    closed = [i for i, char in enumerate(expression) if char == ')']
+    last_opened = opened[-1]
+    first_opened = next(f for f in closed if f > last_opened)
     
     # Évaluer l'expression à l'intérieur des parenthèses
-    sous_expression = expression[derniere_ouverte + 1 : premiere_fermee]
-    resultat = evaluer_expression(sous_expression)
+    brackets_expression = expression[last_opened + 1 : first_opened]
+    result = expression_evaluation(brackets_expression)
     
     # Remplacer l'expression entre parenthèses par le résultat
-    nouvelle_expression = (
-        expression[:derniere_ouverte] + str(resultat) + expression[premiere_fermee + 1:]
+    new_expression = (
+        expression[:last_opened] + str(result) + expression[first_opened + 1:]
     )
-    return nouvelle_expression
+    return new_expression
 
 
-def gerer_operations(expression, operateurs):
+def manage_operations(expression, operators):
     i = 0
     while i < len(expression):
-        if expression[i] in operateurs:
+        if expression[i] in operators:
             gauche = float(expression[i - 1])
             droite = float(expression[i + 1])
-            resultat = effectuer_operation(gauche, droite, expression[i])
+            resultat = perform_operation(gauche, droite, expression[i])
             expression = expression[:i - 1] + [str(resultat)] + expression[i + 2:]
             i = 0  # Recommencer la vérification après modification
         else:
             i += 1
+       
     return expression
 
 
-def effectuer_operation(a, b, operateur):
-    if operateur == "+":
+def perform_operation(a, b, operator):
+    if operator == "+":
         return a + b
-    elif operateur == "-":
+    elif operator == "-":
         return a - b
-    elif operateur == "*":
+    elif operator == "*":
         return a * b
-    elif operateur == "/":
+    elif operator == "/":
         if b == 0:
             raise ValueError("Division par zéro.")
         return a / b
-    elif operateur == "//":
+    elif operator == "//":
         return a // b
-    elif operateur == "%":
+    elif operator == "%":
         return a % b
 
 
-def indices_parentheses(expression):
-    ouvertes = [i for i, c in enumerate(expression) if c == '(']
-    fermees = [i for i, c in enumerate(expression) if c == ')']
-    return ouvertes, fermees
-
-
-def display(resultat):
-    if resultat == int(resultat):
-        print(int(resultat))
-    else:
-        print(f"{resultat:.2f}")
-
-
-def main():
-    arguments = sys.argv[1:]
+def display(result):
+    if result == int(result):
+        print(int(result))
+        return
     
+    print(f"{result:.2f}")
+
+
+def get_arguments():
+    arguments = sys.argv[1:]
+    return arguments
+
+
+def result_is_valid(result,result_eval):
+    if result != result_eval:
+        print("Le résultat n'est pas correcte")
+        print(f"il est de {result} et doit être de {result_eval}")
+        return False
+    return True
+
+
+def evaluating_an_expression():
+    arguments = get_arguments()
     expression = arguments[0]
-    try:
-        resultat = evaluer_expression(expression)
-        resultat_eval = eval(expression)
-        if resultat == resultat_eval:
-            display(resultat)
-        else:
-            print("Le résultat n'est pas correcte")
-    except Exception as e:
-        print(f"Erreur : {e}")
-
-
-main()
+    
+    result = expression_evaluation(expression)
+    result_eval = eval(expression)
+    
+    if result_is_valid(result,result_eval):
+        display(result)
+    
+   
+evaluating_an_expression()
     
    
