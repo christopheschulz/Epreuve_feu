@@ -82,15 +82,29 @@ def load_file(file_name):
         return []
     
    
-def verification_arguments(arguments):
-    ok = False
-    if len(arguments) == 1:
-        if arguments[0].endswith("txt"):
-            ok = True
-    return ok
+def len_arguments_is_valid(arguments,lenght):
+    return len(arguments) == lenght
 
 
-def afficher(result):
+def has_arguments_end_with(argument,suffix):
+    return argument.endswith(suffix)
+
+
+def has_error(arguments):
+    arguments_lenght = 2
+    suffix = "txt"
+    if not len_arguments_is_valid(arguments,arguments_lenght):
+        print(f"Le nombre d'agument doit être de {arguments_lenght}")
+        return True
+    for argument in arguments:
+        if not has_arguments_end_with(argument,suffix):
+            print(f"Le nom de fichier ne termine pas pas {suffix}")
+            return True
+    
+    return False
+
+
+def display(result):
    
     for i in range(9):
         for j in range(9):
@@ -98,21 +112,33 @@ def afficher(result):
         print()
 
 
-def erreur():
-    print("error")
+def board_is_not_ok(board):
+    if not board:
+        return True
+    return False
 
 
-def main():
+def get_arguments():
     arguments = sys.argv[1:]
-    if verification_arguments(arguments):
-        sudoku = load_file(arguments[0])
-        if sudoku:
-            result = sudoku_resolve(sudoku)
-            if result:
-                afficher(sudoku)  
-    else:
-        erreur()
+    return arguments
 
 
-if __name__ == "__main__":
-    main()
+def sudoku():
+    arguments = get_arguments()
+
+    if has_error(arguments):
+        return
+
+    sudoku = load_file(arguments[0])
+    
+    if board_is_not_ok(sudoku):
+        return
+    
+    result = sudoku_resolve(sudoku)
+    if result:
+        display(sudoku)  
+    
+
+
+
+sudoku()

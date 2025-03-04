@@ -78,10 +78,6 @@ def has_error(arguments):
     return False
 
 
-def get_arguments():
-    arguments = sys.argv[1:]
-    return arguments
-
 
 def board_is_not_ok(board):
     if not board:
@@ -112,6 +108,10 @@ def display(board =[], to_find=[], i=0 , j=0):
                 print("-", end="")
         print()  
 
+        
+def get_arguments():
+    arguments = sys.argv[1:]
+    return arguments
 
 def find_pattern():
     arguments = get_arguments()
