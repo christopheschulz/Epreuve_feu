@@ -102,7 +102,7 @@ def get_arguments():
     return arguments
 
 
-def main():
+def greatest_square():
     arguments = get_arguments()
 
     if has_arguments_error(arguments):
@@ -117,4 +117,4 @@ def main():
     display(title,board,result)
 
 
-main()
+greatest_square()
