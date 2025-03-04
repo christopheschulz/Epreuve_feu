@@ -1,6 +1,4 @@
 import sys
-from pprint import pprint
-
 from pathlib import Path
 
 
@@ -25,6 +23,7 @@ def find_greatest_square(board):
     
     return x,y,max_square_size
 
+
 def load_file(file_name):
     path_ = Path.cwd()
     fichier = path_ / file_name
@@ -38,31 +37,48 @@ def load_file(file_name):
         return first_line,board
     except FileNotFoundError:
         print(f"Erreur : Le fichier {fichier.name} n'existe pas.")
-        return []
+        return [],[]
     except Exception as e:
         print(f"Une erreur s'est produite : {e}")
-        return []
+        return [],[]
     
+
+def len_arguments_is_valid(arguments,lenght):
+    return len(arguments) == lenght
    
-def args_are_valid(arguments):
-    return len(arguments) == 1 and arguments[0].endswith(".txt")
+
+def has_arguments_end_with(argument,suffix):
+    return argument.endswith(suffix)
 
 
-def board_is_valid(title ,board):
-    if not board:
-        return False
+def has_arguments_error(arguments):
+    arguments_lenght = 1
+    suffix = "txt"
+    if not len_arguments_is_valid(arguments,arguments_lenght):
+        print(f"Le nombre d'agument doit être de {arguments_lenght}")
+        return True
+    for argument in arguments:
+        if not has_arguments_end_with(argument,suffix):
+            print(f"Le nom de fichier ne termine pas pas {suffix}")
+            return True
+    return False
+
+
+def board_is_not_valid(title ,board):
+    if not board or not title:
+        return True
 
     len_line_board = [len(ligne) for ligne in board]
     if len(set(len_line_board)) != 1:
-        return False
+        return True
     
     allowed_charachter = set(title[-3:])
     for ligne in board:
         for caractere in ligne:
             if caractere not in allowed_charachter:
-                return False
+                return True
     
-    return True
+    return False
 
 
 def display(first_line,board,square):
@@ -70,8 +86,6 @@ def display(first_line,board,square):
     len_line_board = len(board[0])
     
     x, y, square_size = square
-
-    print(x, y , square_size)
 
     print(first_line)
     for i in range(len_board):
@@ -83,24 +97,24 @@ def display(first_line,board,square):
         print()
 
 
-def error():
-    print("error")
+def get_arguments():
+    arguments = sys.argv[1:]
+    return arguments
 
 
 def main():
-    arguments = sys.argv[1:]
-    if args_are_valid(arguments):
-        title, board = load_file(arguments[0])
+    arguments = get_arguments()
+
+    if has_arguments_error(arguments):
+        return
+    
+    title, board = load_file(arguments[0])
         
-        if  board_is_valid(title,board):
-            result = find_greatest_square(board)
-            display(title,board,result)
-        else:
-           error()
-
-    else:
-        error()
+    if  board_is_not_valid(title,board):
+        return
+        
+    result = find_greatest_square(board)
+    display(title,board,result)
 
 
-if __name__ == "__main__":
-    main()
+main()
