@@ -1,8 +1,5 @@
 import sys
-
 from pathlib import Path
-
-path_ = Path.cwd()
 
 
 def sudoku_resolve(sudoku):
@@ -60,18 +57,12 @@ def is_valid(sudoku, line, col, num):
 
 
 def load_file(file_name):
+    path_ = Path.cwd()
     fichier = path_ / file_name
     try:
         with open(fichier, "r", encoding="utf-8") as fichier:
             # On met le fichier en liste par ligne seulement si la ligne n'est pas vide
             resultat = [list(ligne.rstrip("\n")) for ligne in fichier if ligne]
-        
-            # on vérifie les longeurs du tableau de sudoku
-            len_resultat_ok = len(resultat) == 9 and all(len(i)==9 for i in resultat)
-        
-        if  not len_resultat_ok:
-            print("le tableau d'entré n'as pas le bon format")
-            return []
 
         return resultat
     except FileNotFoundError:
@@ -90,8 +81,8 @@ def has_arguments_end_with(argument,suffix):
     return argument.endswith(suffix)
 
 
-def has_error(arguments):
-    arguments_lenght = 2
+def has_arguments_error(arguments):
+    arguments_lenght = 1
     suffix = "txt"
     if not len_arguments_is_valid(arguments,arguments_lenght):
         print(f"Le nombre d'agument doit être de {arguments_lenght}")
@@ -100,7 +91,6 @@ def has_error(arguments):
         if not has_arguments_end_with(argument,suffix):
             print(f"Le nom de fichier ne termine pas pas {suffix}")
             return True
-    
     return False
 
 
@@ -112,9 +102,14 @@ def display(result):
         print()
 
 
-def board_is_not_ok(board):
-    if not board:
+def board_is_not_ok(sudoku):
+    if not sudoku:
         return True
+    
+    lenght_sudoku_ok = len(sudoku) == 9 and all(len(i)==9 for i in sudoku)
+    if not lenght_sudoku_ok:
+        return True
+    
     return False
 
 
@@ -126,7 +121,7 @@ def get_arguments():
 def sudoku():
     arguments = get_arguments()
 
-    if has_error(arguments):
+    if has_arguments_error(arguments):
         return
 
     sudoku = load_file(arguments[0])
@@ -138,7 +133,5 @@ def sudoku():
     if result:
         display(sudoku)  
     
-
-
 
 sudoku()
