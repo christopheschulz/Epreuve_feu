@@ -55,11 +55,11 @@ def has_arguments_error(arguments):
     arguments_lenght = 1
     suffix = "txt"
     if not len_arguments_is_valid(arguments,arguments_lenght):
-        print(f"Le nombre d'agument doit être de {arguments_lenght}")
+        print(f"Le nombre d'arguments doit être de {arguments_lenght}")
         return True
     for argument in arguments:
         if not has_arguments_end_with(argument,suffix):
-            print(f"Le nom de fichier ne termine pas pas {suffix}")
+            print(f"Le nom de fichier ne termine pas par {suffix}")
             return True
     return False
 

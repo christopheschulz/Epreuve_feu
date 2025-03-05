@@ -1,8 +1,7 @@
 import sys
-from pprint import pprint
 from collections import deque
-
 from pathlib import Path
+
 
 def search_start_end(title,maze):
     start_token = title[-2]
@@ -97,30 +96,6 @@ def load_file(file_name):
     except Exception as e:
         print(f"Une erreur s'est produite : {e}")
         return []
-    
-   
-def args_are_valid(arguments):
-    return len(arguments) == 1 and arguments[0].endswith(".map")
-
-
-def board_is_valid(title ,maze):
-    dimension_maze = title[:-5]
-    x_index = dimension_maze.index("x")
-    cols = int(dimension_maze[:x_index])
-    rows = int(dimension_maze[x_index+1:])
-
-    if not maze:
-        return False
-
-    if cols != len(maze):
-        return False
-    
-    len_line_maze = all(len(line) == rows for line in maze)
-    
-    if not len_line_maze:
-        return False
-    
-    return True
 
 
 def display(first_line,maze,result):
@@ -139,25 +114,59 @@ def display(first_line,maze,result):
         print()
 
 
-def error():
-    print("error")
-
-
-def main():
+def get_arguments():
     arguments = sys.argv[1:]
-    if args_are_valid(arguments):
-        title, maze = load_file(arguments[0])
-        if  board_is_valid(title,maze):
-           start, end = search_start_end(title,maze)
-           if start and end:
-               result = escape_maze(title,maze,start,end)
-               display(title,maze,result)
-               
-        else:
-           error()
-    else:
-        error()
+    return arguments
 
 
-if __name__ == "__main__":
-    main()
+def len_arguments_is_valid(arguments,lenght):
+    return len(arguments) == lenght
+   
+
+def has_arguments_end_with(argument,suffix):
+    return argument.endswith(suffix)
+
+
+def has_arguments_error(arguments):
+    arguments_lenght = 1
+    suffix = "map"
+    if not len_arguments_is_valid(arguments,arguments_lenght):
+        print(f"Le nombre d'arguments doit être de {arguments_lenght}")
+        return True
+    for argument in arguments:
+        if not has_arguments_end_with(argument,suffix):
+            print(f"Le nom de fichier ne termine pas par {suffix}")
+            return True
+    return False
+
+
+def maze_is_not_valid(title ,maze):
+    if not maze or not title:
+        return True
+
+    len_line_board = [len(ligne) for ligne in maze]
+    if len(set(len_line_board)) != 1:
+        return True
+    
+    return False
+
+
+def maze():
+    arguments = get_arguments()
+
+    if has_arguments_error(arguments):
+        return
+    
+    title, maze = load_file(arguments[0])
+    if  maze_is_not_valid(title,maze):
+        return
+    
+    start, end = search_start_end(title,maze)
+    if not start or not end:
+        return
+    
+    result = escape_maze(title,maze,start,end)
+    display(title,maze,result)
+
+
+maze()
