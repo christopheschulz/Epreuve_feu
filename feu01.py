@@ -4,10 +4,10 @@ OPERATORS_LEVEL_0 = ["-", "+"]
 OPERATORS_LEVEL_1 = ["*", "/", "//", "%"]
 OPERATORS = OPERATORS_LEVEL_1 + OPERATORS_LEVEL_0
 
-def expression_evaluation(expression):
+def evaluate_expression(expression):
     # Gérer les parenthèses récursivement
     while "(" in expression:
-        expression = evaluation_of_the_expression_between_brackets(expression)
+        expression = evaluate_expression_between_brackets(expression)
     
     # Évaluation sans parenthèses
     
@@ -29,7 +29,7 @@ def splitting_expression(expression):
     return expression.split()
 
 
-def evaluation_of_the_expression_between_brackets(expression):
+def evaluate_expression_between_brackets(expression):
     opened = [i for i, char in enumerate(expression) if char == '(']
     closed = [i for i, char in enumerate(expression) if char == ')']
     last_opened = opened[-1]
@@ -37,7 +37,7 @@ def evaluation_of_the_expression_between_brackets(expression):
     
     # Évaluer l'expression à l'intérieur des parenthèses
     brackets_expression = expression[last_opened + 1 : first_opened]
-    result = expression_evaluation(brackets_expression)
+    result = evaluate_expression(brackets_expression)
     
     # Remplacer l'expression entre parenthèses par le résultat
     new_expression = (
@@ -103,7 +103,7 @@ def evaluating_an_expression():
     arguments = get_arguments()
     expression = arguments[0]
     
-    result = expression_evaluation(expression)
+    result = evaluate_expression(expression)
     result_eval = eval(expression)
     
     if result_is_valid(result,result_eval):

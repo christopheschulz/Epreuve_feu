@@ -20,7 +20,7 @@ def find_pattern_in_board(board,to_find):
     for i in range(board_height - to_find_height + 1):
         for j in range(board_width - to_find_width + 1):
                 if board[i][j] == to_find_first_value:
-                    result = pattern_is_in(board, to_find, i, j)
+                    result = pattern_is_in_board(board, to_find, i, j)
                     
                     if result:
                         display(board, to_find, i, j)
@@ -28,7 +28,7 @@ def find_pattern_in_board(board,to_find):
     return False
 
 
-def pattern_is_in(board, to_find, board_height_pos, board_width_pos):
+def pattern_is_in_board(board, to_find, board_height_pos, board_width_pos):
     to_find_height = len(to_find)
     to_find_width = len(to_find[0])
 
@@ -64,7 +64,7 @@ def has_arguments_end_with(argument,suffix):
     return argument.endswith(suffix)
    
 
-def has_error(arguments):
+def has_arguments_error(arguments):
     arguments_lenght = 2
     suffix = "txt"
     if not len_arguments_is_valid(arguments,arguments_lenght):
@@ -76,7 +76,6 @@ def has_error(arguments):
             return True
     
     return False
-
 
 
 def board_is_not_ok(board):
@@ -113,10 +112,11 @@ def get_arguments():
     arguments = sys.argv[1:]
     return arguments
 
+
 def find_pattern():
     arguments = get_arguments()
 
-    if has_error(arguments):
+    if has_arguments_error(arguments):
         return
     
     board = load_file(arguments[0])

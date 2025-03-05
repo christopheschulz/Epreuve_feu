@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 
 
-def sudoku_resolve(sudoku):
+def resolve_sudoku(sudoku):
     # on cherche une case vide
     case = find_empty_box(sudoku)
     
@@ -18,7 +18,7 @@ def sudoku_resolve(sudoku):
             # notre fichier sudoku est une chaine de caractère d'où le str()
             sudoku[line][col] = str(num)  
 
-            if sudoku_resolve(sudoku):  
+            if resolve_sudoku(sudoku):  
                 return True
             # on remet un point si c'est pas la solution
             sudoku[line][col] = "." 
@@ -129,7 +129,7 @@ def sudoku():
     if board_is_not_ok(sudoku):
         return
     
-    result = sudoku_resolve(sudoku)
+    result = resolve_sudoku(sudoku)
     if result:
         display(sudoku)  
     
