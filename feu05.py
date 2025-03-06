@@ -98,27 +98,6 @@ def load_file(file_name):
         return []
 
 
-def display(first_line,maze,result):
-    len_maze = len(maze)
-    len_line_maze = len(maze[0])
-    
-    print(first_line)
-    for i in range(len_maze):
-        for j in range(len_line_maze):
-            for r in result:
-                if maze[i][j] != "1" and maze[i][j] != "2":
-                    if i == r[0] and j == r[1]:
-                        maze[i][j] = "o"
-            
-            print(maze[i][j],end="")
-        print()
-
-
-def get_arguments():
-    arguments = sys.argv[1:]
-    return arguments
-
-
 def len_arguments_is_valid(arguments,lenght):
     return len(arguments) == lenght
    
@@ -149,6 +128,27 @@ def maze_is_not_valid(title ,maze):
         return True
     
     return False
+
+
+def display(first_line,maze,result):
+    len_maze = len(maze)
+    len_line_maze = len(maze[0])
+    
+    print(first_line)
+    for i in range(len_maze):
+        for j in range(len_line_maze):
+            for r in result:
+                if maze[i][j] != "1" and maze[i][j] != "2":
+                    if i == r[0] and j == r[1]:
+                        maze[i][j] = "o"
+            
+            print(maze[i][j],end="")
+        print()
+
+
+def get_arguments():
+    arguments = sys.argv[1:]
+    return arguments
 
 
 def maze():

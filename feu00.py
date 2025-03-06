@@ -28,12 +28,7 @@ def display_intermediate_row(j,rows):
         char = " "
     print(char,end="")
 
-
-def get_arguments():
-    arguments = sys.argv[1:]
-    return arguments
-    
-    
+ 
 def len_arguments_is_valid(arguments,lenght):
     return len(arguments) == lenght
 
@@ -59,6 +54,11 @@ def has_error(arguments):
             print("erreur 0 dans argument")
             return True
     return False
+
+
+def get_arguments():
+    arguments = sys.argv[1:]
+    return arguments
 
 
 def warm_up():

@@ -107,7 +107,7 @@ def display(board =[], to_find=[], i=0 , j=0):
                 print("-", end="")
         print()  
 
-        
+
 def get_arguments():
     arguments = sys.argv[1:]
     return arguments

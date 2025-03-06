@@ -86,17 +86,17 @@ def display(result):
     print(f"{result:.2f}")
 
 
-def get_arguments():
-    arguments = sys.argv[1:]
-    return arguments
-
-
 def result_is_valid(result,result_eval):
     if result != result_eval:
         print("Le résultat n'est pas correcte")
         print(f"il est de {result} et doit être de {result_eval}")
         return False
     return True
+
+
+def get_arguments():
+    arguments = sys.argv[1:]
+    return arguments
 
 
 def evaluating_an_expression():

@@ -94,12 +94,7 @@ def has_arguments_error(arguments):
     return False
 
 
-def display(result):
-   
-    for i in range(9):
-        for j in range(9):
-            print(result[i][j],end="")
-        print()
+
 
 
 def board_is_not_ok(sudoku):
@@ -111,6 +106,14 @@ def board_is_not_ok(sudoku):
         return True
     
     return False
+
+
+def display(result):
+   
+    for i in range(9):
+        for j in range(9):
+            print(result[i][j],end="")
+        print()
 
 
 def get_arguments():
